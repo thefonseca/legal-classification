@@ -1,0 +1,5 @@
+models/*
+data/*
+*_ignore.*
+*.ipynb_*
+__pycache__
