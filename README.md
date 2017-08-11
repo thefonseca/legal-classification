@@ -80,4 +80,4 @@ Mais detalhes sobre as regras de indexação podem ser encontradas no [Manual de
 * [Working With Text Data](http://scikit-learn.org/stable/tutorial/text_analytics/working_with_text_data.html)
 * [Analyzing tf-idf results in scikit-learn](https://buhrmann.github.io/tfidf-analysis.html)
 * [Convolutional Neural Networks for Sentence Classification](https://arxiv.org/abs/1408.5882)
-* [Lex2vec:word2vec aplicado à legislação brasileira](https://github.com/thefonseca/lex2vec)
+* [Lex2vec: word2vec aplicado à legislação brasileira](https://github.com/thefonseca/lex2vec)
