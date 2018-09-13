@@ -1,7 +1,4 @@
 import sys
-import os
-import shutil
-import time
 import traceback
 
 from flask import Flask, request, jsonify
@@ -10,39 +7,46 @@ from sklearn.externals import joblib
 
 import inference
 
+
 app = Flask(__name__)
 
 
-model_filename = os.path.join('models', 'bag-of-words-all-classes.pkl')
-labels_filename = os.path.join('models', 'temas.csv')
+def load_model():
+    model_filename, labels_filename = inference.download_model()
+    print('Loading model...')
+    model_ = joblib.load(model_filename)
+    labels_ = pd.read_csv(labels_filename)
+    print('Modelo treinado para {} temas'.format(labels_.shape[0]))
+    return model_, labels_
+
+
 labels = None
-clf = None
+model = None
 
-@app.route('/predict', methods=['POST'])
+
+@app.route('/temas', methods=['POST'])
 def predict():
-    
-    if clf:
-        try:
-            #json_ = request.json
-            #query = pd.get_dummies(pd.DataFrame(json_))
-            query = request.get_json()
+    try:
+        query = request.get_json()
+        prediction = inference.predict_labels(model, labels, query['text'])
+        result = list(zip(prediction['LABEL'], prediction['PROBABILITY']))
+        #print('\n', result)
+        return jsonify({'prediction': result}), 200
 
-            # https://github.com/amirziai/sklearnflask/issues/3
-            # Thanks to @lorenzori
-            #query = query.reindex(columns=model_columns, fill_value=0)
-            print(query)
+    except Exception as ex:
+        return jsonify({'error': str(ex), 'trace': traceback.format_exc()})
 
-            prediction = list(inference.predict_labels(clf, labels, query.text))
 
-            return jsonify({'prediction': prediction})
+@app.route('/temas/url', methods=['POST'])
+def predict_url():
+    try:
+        query = request.get_json()
+        prediction, text = inference.predict_labels_url(model, labels, query['url'])
+        result = list(zip(prediction['LABEL'], prediction['PROBABILITY']))
+        return jsonify({'text': text, 'prediction': result}), 200
 
-        except Exception as e:
-            return jsonify({'error': str(e), 'trace': traceback.format_exc()})
-
-    else:
-        print('train first')
-        return 'no model here'
-
+    except Exception as ex:
+        return jsonify({'error': str(ex), 'trace': traceback.format_exc()})
 
 
 try:
@@ -51,13 +55,9 @@ except:
     port = 8080
 
 try:
-    clf = joblib.load(model_filename)
-    print('model loaded')
-    labels = pd.read_csv(labels_filename)
-    print('model labels loaded')
+    model, labels = load_model()
 
-except Exception as e:
-    print('No model here')
-    print('Train first')
-    print(str(e))
-    clf = None
+except Exception as ex:
+    print('Could not load model.')
+    print(str(ex))
+    model = None

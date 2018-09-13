@@ -4,6 +4,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 from html.parser import HTMLParser
 from unidecode import unidecode
 from sklearn.externals import joblib
+import urllib
 from urllib.request import urlretrieve
 from tqdm import tqdm
 import os, errno
