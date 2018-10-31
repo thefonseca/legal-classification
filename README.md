@@ -53,7 +53,7 @@ O objetivo é utilizar as informações de tematização para formar um conjunto
 
 
 ## Extração e preparação dos dados
-As informações de normas são extraídas do banco de dados do Sistema de Informação Informatizada (Legin), que armazena mais de 250 mil normas, sendo mais de 175 mil com indexação manual e pouco mais de 32 mil possuem classificação temática. Acesse o [notebook](dataset.ipynb) com detalhes da preparação dos dados.
+As informações de normas são extraídas do banco de dados do Sistema de Legislação Informatizada (Legin), que armazena mais de 250 mil normas, sendo mais de 175 mil com indexação manual e pouco mais de 32 mil possuem classificação temática. Acesse o [notebook](dataset.ipynb) com detalhes da preparação dos dados.
 
 
 ## Treinamento e avaliação dos modelos
